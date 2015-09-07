@@ -1,0 +1,18 @@
+<div class="container" ng-controller="AppointmentCtrl">
+	
+	<div name="timeSchedContainer">
+        <h2>Horarios de {{contactInfo.name}}</h2>
+        
+        <div name="buttonContainer">
+        	<h4 class="successMessage" colour="green">{{successMessage}}</h4>
+        	<input type="datetime-local" id="exampleInput" name="input" ng-model="contactInfo.newAppointment">
+        	<button class="btn btn-success" ng-click="addAppointment(contactInfo._id)">Agregar nuevo horario</button>
+    	</div>
+
+        <div name="appointmentContainer" ng-repeat="date in contactInfo.appointments">
+        	<h4>{{date|date:'medium'}}<button class="btn btn-danger" ng-click="deleteAppointment(contactInfo.appointments.indexOf(date),contactInfo._id)">X</button></h4>
+    	</div>    
+    
+    </div> 
+
+</div>

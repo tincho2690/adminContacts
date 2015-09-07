@@ -1,0 +1,30 @@
+
+<div class="container" ng-controller="ContactDetailCtrl" >
+	
+	<h2>Informacion de  {{detailedContact.name}}</h2>
+
+	<div class="button container">
+	
+		<a href="#/contactHome/contactDetail/contactEdit/{{detailedContact._id}}"><button class="btn btn-warning">Editar</button></a>
+    	<a href="#/contactHome"> <button class="btn btn-danger" ng-click="remove(detailedContact._id)">Eliminar</button></a>	
+		<a href="#/contactHome"> <button class="btn btn-info">Volver</button></a>	
+	
+	</div>
+	
+	<div class="contactInfoBox">
+	
+		<h3>Nombre: {{detailedContact.name}}</h3>
+		<h4>DNI:	{{detailedContact.dni}}</h4>
+		<h4>Email:  {{detailedContact.email}}</h4>
+		<h4>Nro Cel:{{detailedContact.tel}}</h4>
+		<h4>Proximos Horarios:</h4>
+
+		<div name="appointmentContainer" ng-repeat="dates in detailedContact.appointments | filter:searchText">
+        	<h3>{{dates|date:'medium'}}</h3>
+    	</div>  
+
+	</div>
+
+	<a href="#/contactHome/contactDetail/appointmentDetail/{{detailedContact._id}}"> <button class="btn btn-primary">Ver todos los horarios</button></a>
+	
+</div>

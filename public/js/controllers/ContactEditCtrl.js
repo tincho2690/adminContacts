@@ -1,0 +1,18 @@
+angular.module('MyApp')
+.controller('ContactEditCtrl',['$scope', '$http','$routeParams', function($scope,$http,$routeParams){
+		
+	console.log($routeParams.contactID);
+	$http.get('/contactlist/contactedit/'+ $routeParams.contactID).success(function(response){
+			$scope.contact = response;
+			//console.log($scope.detailedContact.name);
+	});
+
+	$scope.update = function(){
+
+		console.log("Entre al update");
+		$http.put('/contactlist/contactedit/' + $scope.contact._id, $scope.contact).success(function(response){
+			$scope.successMessage="El usuario fue modificado";
+		});
+	
+	};
+}]); 
