@@ -5,9 +5,9 @@
 
 	<div class="button container">
 	
-		<a href="#/contactHome/contactDetail/contactEdit/{{detailedContact._id}}"><button class="btn btn-warning">Editar</button></a>
-    	<a href="#/contactHome"> <button class="btn btn-danger" ng-click="remove(detailedContact._id)">Eliminar</button></a>	
-		<a href="#/contactHome"> <button class="btn btn-info">Volver</button></a>	
+		<a href="#/contactEdit/{{detailedContact._id}}"><button class="btn btn-warning">Editar</button></a>
+    	<a href="#/"> <button class="btn btn-danger" ng-click="remove(detailedContact._id)">Eliminar</button></a>	
+		<a href="#/"> <button class="btn btn-info">Volver</button></a>	
 	
 	</div>
 	
@@ -20,11 +20,11 @@
 		<h4>Proximos Horarios:</h4>
 
 		<div name="appointmentContainer" ng-repeat="dates in detailedContact.appointments | filter:searchText">
-        	<h3>{{dates|date:'medium'}}</h3>
+        	<h5>{{dates|date:'medium'}}</h5>
     	</div>  
 
 	</div>
 
-	<a href="#/contactHome/contactDetail/appointmentDetail/{{detailedContact._id}}"> <button class="btn btn-primary">Ver todos los horarios</button></a>
+	<a href="#/appointmentDetail/{{detailedContact._id}}"> <button class="btn btn-primary">Ver todos los horarios</button></a>
 	
 </div>

@@ -56,7 +56,7 @@ Post Methods
 --------------------------
 */
 
-app.post('/contactlist',function(req, res){
+app.post('/contactInsert',function(req, res){
 
   var Contact = mongoose.model('Contact');
   var newContact = new Contact();
@@ -105,7 +105,7 @@ app.delete('/contactlist/deleteAppointment/:id', function(req, res){
 
 });
 
-app.delete('/contactlist/:id', function(req, res){
+app.delete('/contactDelete/:id', function(req, res){
   
   console.log("Entre al delete del contacto");
   var id = req.params.id;
@@ -123,7 +123,7 @@ Get Methods
 -----------------------
 */
 
-app.get("/contactlist",function(req,res){
+app.get("/allContacts",function(req,res){
   
   console.log("Get full ContactList");
   
@@ -134,7 +134,7 @@ app.get("/contactlist",function(req,res){
 
 });
 
-app.get('/contactlist/:id', function(req, res){
+/*app.get('/contactlist/:id', function(req, res){
 
   console.log("Get desde info usuario");
   
@@ -147,9 +147,9 @@ app.get('/contactlist/:id', function(req, res){
     res.json(docs);
   })
 
-});
+});*/
 
-app.get('/contactlist/contactdetail/:id', function(req, res){
+app.get('/singleContact/:id', function(req, res){
   
   console.log("GET del detailed ");
   
@@ -165,25 +165,8 @@ app.get('/contactlist/contactdetail/:id', function(req, res){
 
 });
 
-app.get('/contactlist/contactedit/:id', function(req, res){
 
-  console.log("GET del edit user");
-  
-  var id = req.params.id;
-  
-  Contact.findOne({'_id': id}, function (err, docs) {
-    if (err) return console.error(err);
-    console.log(docs);
-    res.json(docs);
-  })
-
-  // db.contactlist.findOne({_id: mongojs.ObjectId(id)}, function(err, doc){
-  //   res.json(doc);
-  // })
-
-});
-
-app.get('/contactlist/contactinsert/:dni',function(req,res){
+app.get('/contactExists/:dni',function(req,res){
   
   console.log("entro al :DNI");
   var dni = req.params.dni;
@@ -201,7 +184,7 @@ Put Methods
 ---------------
 */
 
-app.put('/contactlist/contactedit/:id', function(req, res){
+app.put('/contactEdit/:id', function(req, res){
 
   console.log("Put del edit user");
 
@@ -294,3 +277,4 @@ connection.end();
 /*var db = mongojs('contactlist', ['contactlist']);
 var dbSched = mongojs('timesched',['timesched']);*/
         
+

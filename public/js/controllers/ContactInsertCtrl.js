@@ -1,10 +1,10 @@
 angular.module('MyApp')
 .controller('ContactInsertCtrl',['$scope', '$http', function($scope,$http){
-
-	    $scope.addContact = function(){
+	    
+   
+        $scope.addContact = function(){
     	   	
-
-    	   	console.log("entroooo")
+    	   	console.log("entroooo");
     	   	console.log($scope.contact);
     	   	
     	   	if(($scope.contact.name == null)||($scope.contact.email ==null)||($scope.contact.number ==null)){
@@ -14,7 +14,9 @@ angular.module('MyApp')
     	   	else{
 
     	   		console.log("entro al else del que tiene los campos completos");
-    	   		$http.get('/contactlist/contactinsert/'+$scope.contact.dni ,$scope.contact).success(function(response){
+                
+
+    	   		$http.get('/contactExists/'+ $scope.contact.dni ,$scope.contact).success(function(response){
     	   				
     	   			console.log(response);
     	   			console.log(response.length == 0);
@@ -25,7 +27,7 @@ angular.module('MyApp')
     	   				//horarios = {"lunes": [],"martes":[],"miercoles":[],"jueves":[],"viernes":[],"sabado":[],"domingo":[]};
     	   				//$scope.contact.horarios = horarios;
     	   				
-    	   				$http.post('/contactlist', $scope.contact).success(function(response){
+    	   				$http.post('/contactInsert', $scope.contact).success(function(response){
 		    				//console.log(response);
 		    				$scope.successMessage="Usuario agregado correctamente";
 		    				$scope.errorMessage="";

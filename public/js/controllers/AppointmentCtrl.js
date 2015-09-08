@@ -2,7 +2,7 @@ angular.module('MyApp')
 .controller('AppointmentCtrl',['$scope', '$http','$routeParams', function($scope,$http,$routeParams){
 
 	console.log($routeParams.contactID);
-	$http.get('/contactlist/' + $routeParams.contactID).success(function(response){
+	$http.get('/singleContact/' + $routeParams.contactID).success(function(response){
 		$scope.contactInfo = response;
 		console.log($scope.contactInfo);
 
