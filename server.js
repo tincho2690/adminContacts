@@ -6,6 +6,7 @@ var mongojs = require('mongojs');
 var bodyParser = require('body-parser');
 var dateformat = require('dateformat');
 
+var userRouter = require('./routes/userRouter');
 
 /*
 --------------------------
@@ -19,7 +20,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 
 db.once('open', function (callback) {
-  // yay!
+  
 });
 
 /*
@@ -48,6 +49,7 @@ var app = express();
 
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
+
 
 
 /*
@@ -81,11 +83,11 @@ Delete Methods
 ------------------
 */
 
-app.delete('/contactlist/deleteAppointment/:id', function(req, res){
+app.delete('/deleteAppointment/:index', function(req, res){
 
   console.log("En el delete del appointment")
   
-  var paramInfo = req.params.id;
+  var paramInfo = req.params.index;
   var appointmentId = paramInfo[1];
   var contactId = paramInfo.substring(1);
   
@@ -126,7 +128,6 @@ Get Methods
 app.get("/allContacts",function(req,res){
   
   console.log("Get full ContactList");
-  
   Contact.find(function (err, docs) {
     if (err) return console.error(err);
     res.json(docs);
@@ -134,29 +135,12 @@ app.get("/allContacts",function(req,res){
 
 });
 
-/*app.get('/contactlist/:id', function(req, res){
-
-  console.log("Get desde info usuario");
-  
-  var id = req.params.id;
-  
-  Contact.findOne({'_id': id}, function (err, docs) {
-    if (err) return console.error(err);
-    console.log(docs);
-    console.log("no trae nada");
-    res.json(docs);
-  })
-
-});*/
-
 app.get('/singleContact/:id', function(req, res){
   
   console.log("GET del detailed ");
-  
   var id = req.params.id;
   console.log(id);
   //console.log(req.body.appointments);
-  
   Contact.findOne({'_id': id}, function (err, docs) {
     if (err) return console.error(err);
     //console.log(docs);
@@ -164,7 +148,6 @@ app.get('/singleContact/:id', function(req, res){
   })
 
 });
-
 
 app.get('/contactExists/:dni',function(req,res){
   
@@ -175,7 +158,6 @@ app.get('/contactExists/:dni',function(req,res){
   Contact.find({ 'dni': dni }, function (err, docs) {
     res.json(docs);
   });
-
 });
 
 /*
@@ -191,6 +173,7 @@ app.put('/contactEdit/:id', function(req, res){
   var id = req.params.id;
   var now = new Date();
   var date = dateformat(now);
+  
   Contact.update({'_id': id},{$set: {name: req.body.name, email:req.body.email, tel: req.body.number},$push:{appointments: date}}, function (err, docs){
     if (err) return console.error(err);
     res.json(docs);
@@ -198,13 +181,11 @@ app.put('/contactEdit/:id', function(req, res){
   
 });
 
-app.put('/contactlist/addAppointment/:id', function(req, res){
+app.put('/addAppointment/:id', function(req, res){
 
   console.log("Put del addAppointment");
-
   var id = req.params.id;
   var date = dateformat(req.body.newAppointment);
- 
   Contact.update({'_id': id},{$push:{appointments: date}}, function (err, docs){
     if (err) return console.error(err);
     console.log(docs);
@@ -214,67 +195,4 @@ app.put('/contactlist/addAppointment/:id', function(req, res){
 
 app.listen(8080);
 console.log("Server running on port 8080");
-
-
-//Connection with MySQL
-/*
-var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'crud_tutorial'
-});
-
-connection.connect(function(err){
-if(!err) {
-    console.log("Database is connected ... \n\n");  
-} else {
-    console.log("Error connecting database ... \n\n");  
-}
-});
-*/
-
-//Getting data from MySQL
-
-/* connection.query('SELECT * from customers', function(err, rows, fields) {
-connection.end();
-  if (!err){
-    
-    console.log('The solution is: ', rows[0].name, rows[0].email, rows[0].number);
-    var contact = rows[0];
-    res.json(contact);
-
-  }
-  else
-    console.log('Error while performing Query.');
-  });
-});
-*/
-
-//Con Datos planos
-
-/* 
-    
-    person1={
-        name: 'Martin',
-        email: 'martin@hotmail.com',
-        number: '1111111111'
-    };
-    
-    person2={
-        name: 'Martin',
-        email: 'martin@hotmail.com',
-        number: '1111111111'
-    };
-    
-   var contactList = [person1, person2];
-   res.json(contactList);
-
-});*/
-
-//Connection with MongoDB
-
-/*var db = mongojs('contactlist', ['contactlist']);
-var dbSched = mongojs('timesched',['timesched']);*/
-        
 

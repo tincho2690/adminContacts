@@ -6,47 +6,29 @@ angular.module('MyApp')
     	   	
     	   	console.log("entroooo");
     	   	console.log($scope.contact);
-    	   	
-    	   	if(($scope.contact.name == null)||($scope.contact.email ==null)||($scope.contact.number ==null)){
+ 	   	
+	   		$http.get('/contactExists/'+ $scope.contact.dni ,$scope.contact).success(function(response){
+	   				
+	   			console.log(response);
+	   			console.log(response.length == 0);
+	   			if (response.length === 0){
+	   				
+	   				console.log("entro al if del que no existe")
 
-    	   		$scope.errorMessage="Por favor complete todos los datos";
-    	   	}
-    	   	else{
+	   					$http.post('/contactInsert', $scope.contact).success(function(response){
+	    				//console.log(response);
+	    				$scope.successMessage="Usuario agregado correctamente";
+	    				$scope.errorMessage="";
+	    				$scope.contact="";
+	    			});	   	   				
+	   			}
+	   			else{
+	   				$scope.errorMessage="El contacto ya existe";  				
+	   				window.alert($scope.errorMessage);
+	   				$scope.successMessage="";
+	   			}
 
-    	   		console.log("entro al else del que tiene los campos completos");
-                
-
-    	   		$http.get('/contactExists/'+ $scope.contact.dni ,$scope.contact).success(function(response){
-    	   				
-    	   			console.log(response);
-    	   			console.log(response.length == 0);
-    	   			if (response.length === 0){
-    	   				
-    	   				console.log("entro al if del que no existe")
-
-    	   				//horarios = {"lunes": [],"martes":[],"miercoles":[],"jueves":[],"viernes":[],"sabado":[],"domingo":[]};
-    	   				//$scope.contact.horarios = horarios;
-    	   				
-    	   				$http.post('/contactInsert', $scope.contact).success(function(response){
-		    				//console.log(response);
-		    				$scope.successMessage="Usuario agregado correctamente";
-		    				$scope.errorMessage="";
-		    				$scope.contact="";
-		    			});	   	   				
-    	   			}
-    	   			else{
-    	   				$scope.errorMessage="El contacto ya existe";  				
-    	   				window.alert($scope.errorMessage);
-    	   				$scope.successMessage="";
-    	   			}
-
-    	   		});
-    	   			/*error(function(data, status, headers, config) {
-  						$http.post('/contactlist', $scope.contact).success(function(response){
-		    				console.log(response);
-		    				$scope.successMessage="Usuario agregado correctamente";
-		    			})		
-    				*/  					
-	    	}
-	    }	
-}]);
+	   		});
+	   	}
+    }	
+]);

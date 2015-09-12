@@ -1,14 +1,14 @@
 
 <div class="container" ng-controller="ContactHomeCtrl">
     
-    <H2>Mi Lista de Contactos</H2>
+    <H3>Mi Lista de Contactos</H3>
     
    
     
     <label>Buscar Contacto: <input ng-model="searchText"></label>
     
     <div name="contactContainer" ng-repeat="contact in contactList | filter:searchText">
-        <h3><a href="#/contactDetail/{{contact._id}}">{{contact.name}} </a></h3>
+        <h4><a href="#/contactDetail/{{contact._id}}">{{contact.name}} </a></h4>
     </div>    
 
     <div name="buttonContainer">

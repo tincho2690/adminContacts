@@ -1,5 +1,23 @@
 angular.module('MyApp',['ngRoute'])
 
+.factory('testService', ['$http', function($http) {
+
+	var x;
+
+	$http.get('/singleContact/'+'55bd222f18195c441cf788a2').success(function(response){
+			console.log(response.name);
+			//return reponse;
+			//return response;
+			x = response.name;
+			return x
+	
+	})
+	console.log(x);
+	return x
+	
+						
+}])
+
 .config(function($routeProvider){
 	$routeProvider
 		
@@ -15,3 +33,13 @@ angular.module('MyApp',['ngRoute'])
 			redirectTo: '/'
 		});
 });
+/*.factory('contactInsertService', function(){
+
+	return{
+		validateFields: function(){
+
+		};
+	};
+
+
+});*/
