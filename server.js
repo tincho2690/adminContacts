@@ -8,11 +8,6 @@ var dateformat = require('dateformat');
 
 var userRouter = require('./routes/userRouter');
 
-/*
--------------------------
-Passport
--------------------------
-*/
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
@@ -63,6 +58,22 @@ app.use(cookieParser());
 app.use(session({secret: 'secret'}));
 app.use(passport.initialize());
 app.use(passport.session());
+
+/*
+-------------------------
+Passport
+-------------------------
+*/
+
+passport.use(new LocalStrategy(
+  function(contact, done){
+    if (contact.username == "admin" && contact.pass == "123"){
+      return done(null,)
+    }
+    return done(null,false,{message:"unable to login"});
+  }
+));
+
 
 
 /*
