@@ -1,24 +1,23 @@
 angular.module('MyApp',['ngRoute'])
 
-.factory('testService', ['$http', function($http) {
+.factory('AuthService',['$http', function($http){
 
-	var x;
+//return "ya";
 
-	$http.get('/singleContact/'+'55bd222f18195c441cf788a2').success(function(response){
-			console.log(response.name);
-			//return reponse;
-			//return response;
-			x = response.name;
-			return x
-	
-	})
-	console.log(x);
-	return x
-	
-						
+/*var login = function(contact, callback){
+
+	return "llegue al service";
+
+};*/
+return {
+		login: function(contact, callback){
+			callback("tet");
+		}
+	};
+
 }])
 
-.config(function($routeProvider){
+.config(function($routeProvider,$httpProvider){
 	$routeProvider
 		
 		
@@ -28,18 +27,23 @@ angular.module('MyApp',['ngRoute'])
 		.when('/appointmentDetail/:contactID',{templateUrl:'appointmentDetail.html'})
 		.when('/contactEdit/:contactID',{templateUrl:'contactEdit.html'})
 		.when('/contactInsert',{templateUrl:'contactInsert.html'})
-		
+		.when('/login',{templateUrl:'contactLogin.html'})
 		.otherwise({
 			redirectTo: '/'
 		});
-});
-/*.factory('contactInsertService', function(){
+	$httpProvider.interceptors
+	.push(function($q, $location){
 
-	return{
-		validateFields: function(){
-
+		return{
+			response: function(response){
+				return response;
+			},
+			responseError: function(response){
+				if (response.status ===401)
+					$location.url('#/login');
+				return $1.reject(response);
+			}
 		};
-	};
+	});
+});
 
-
-});*/

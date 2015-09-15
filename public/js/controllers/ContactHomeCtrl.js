@@ -1,5 +1,5 @@
 angular.module('MyApp')
-.controller('ContactHomeCtrl',['$scope', '$http','testService', function($scope,$http,testService){
+.controller('ContactHomeCtrl',['$scope', '$http'/*,'testService'*/, function($scope,$http/*,testService*/){
 
 	/*var refresh = function(){
 		console.log("i call the function");
@@ -12,7 +12,7 @@ angular.module('MyApp')
 
 	refresh();
 	*/
-	console.log(testService);
+	//console.log(testService);
 	console.log("i call the function");
 		$http.get('/allContacts').success(function(response){
 		    console.log("i got the requested data");
