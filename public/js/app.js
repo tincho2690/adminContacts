@@ -31,7 +31,7 @@ return {
 		.otherwise({
 			redirectTo: '/'
 		});
-	$httpProvider.interceptors
+	/*$httpProvider.interceptors
 	.push(function($q, $location){
 
 		return{
@@ -44,6 +44,6 @@ return {
 				return $1.reject(response);
 			}
 		};
-	});
+	});*/
 });
 

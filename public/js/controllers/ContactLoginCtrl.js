@@ -9,10 +9,16 @@ angular.module('MyApp').controller('ContactLoginCtrl',['$scope','$http','$locati
 
 		//console.log(AuthService.login($scope.contact));
 
-		AuthService.login($scope.contact, function(responseContact){
+		$http.post('/login',$scope.contact).success(function(response){
+			console.log(response);
+		}).error(function(response){
+			console.log('error');
+		});
+		
+		/*AuthService.login($scope.contact, function(responseContact){
 			console.log(responseContact);
 
-		});
+		});*/
 
 	};
 	

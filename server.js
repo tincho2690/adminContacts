@@ -11,7 +11,10 @@ var userRouter = require('./routes/userRouter');
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
-var LocalStrategy = require('passport-local');
+var LocalStrategy = require('passport-local').Strategy;
+
+var configDB = require('./config/database.js');
+
 
 /*
 --------------------------
@@ -19,7 +22,7 @@ Connection with Mongooose
 --------------------------
 */
 
-mongoose.connect('mongodb://localhost/contacts');
+mongoose.connect(configDB.url);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
@@ -55,7 +58,7 @@ var app = express();
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(session({secret: 'secret'}));
+//app.use(session({secret: 'secret'}));
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -65,15 +68,21 @@ Passport
 -------------------------
 */
 
-passport.use(new LocalStrategy(
+//((passport.
+
+
+
+/*passport.use(new LocalStrategy(
   function(contact, done){
+    console.log("entre al local strat");
     if (contact.username == "admin" && contact.pass == "123"){
-      return done(null,)
+      
+      return done(null,contact);
     }
     return done(null,false,{message:"unable to login"});
   }
 ));
-
+*/
 
 
 /*
@@ -99,6 +108,13 @@ app.post('/contactInsert',function(req, res){
     res.json(docs);
   });
 
+});
+
+app.post('/login'/*, passport.authenticate('local')*/, function(req,res){
+  
+  console.log("entre al login");
+  
+  res.send(req.user);
 });
 
 /*
