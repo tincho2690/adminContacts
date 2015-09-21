@@ -2,17 +2,22 @@ angular.module('MyApp').controller('ContactLoginCtrl',['$scope','$http','$locati
 
 	//AuthService.login($scope.contact);
 	$scope.login = function(contact){
-
+		console.log($scope.contact);
 		console.log($scope.contact.username);
-		console.log($scope.contact.pass);
+		console.log($scope.contact.password);
 		//console.log(AuthService);
 
 		//console.log(AuthService.login($scope.contact));
 
-		$http.post('/login',$scope.contact).success(function(response){
-			console.log(response);
+		$http.post('/login', $scope.contact).success(function(user){
+			console.log('volvio por el success');
+			console.log(user);
+			$location.path('/contactDetail/'+user._id);
+			//var loggedUser = response;
+			//console.log(loggedUser);
 		}).error(function(response){
-			console.log('error');
+			console.log('volvio por el error');
+			console.log(response);
 		});
 		
 		/*AuthService.login($scope.contact, function(responseContact){

@@ -6,13 +6,13 @@ var mongojs = require('mongojs');
 var bodyParser = require('body-parser');
 var dateformat = require('dateformat');
 
-var userRouter = require('./routes/userRouter');
+//var userRouter = require('./routes/userRouter');
 
 var passport = require('passport');
 var cookieParser = require('cookie-parser');
 var session = require("express-session");
-var LocalStrategy = require('passport-local').Strategy;
-
+var LocalStrategy   = require('passport-local').Strategy;
+var flash    = require('connect-flash');
 var configDB = require('./config/database.js');
 
 
@@ -33,19 +33,11 @@ db.once('open', function (callback) {
 
 /*
 --------------------------
-Mongooose Schemas
+Load Mongooose Schemas
 --------------------------
 */
 
-var contactSchema = mongoose.Schema({
-    name: String,
-    dni: String,
-    tel: String,
-    email: String,
-    appointments:[Date]
-});
-
-var Contact = mongoose.model('Contact', contactSchema);
+var Contact = require('./model/contact.js');
 
 /*
 --------------------------
@@ -58,9 +50,14 @@ var app = express();
 app.use(express.static(__dirname + "/public"));
 app.use(bodyParser.json());
 app.use(cookieParser());
-//app.use(session({secret: 'secret'}));
+app.use(session({secret: 'secret'}));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
+
+require('./routes/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
+require('./config/passport')(passport); // pass passport for configuration
 
 /*
 -------------------------
@@ -68,21 +65,67 @@ Passport
 -------------------------
 */
 
-//((passport.
+/*passport.serializeUser(function(contact, done) {
+      done(null, contact.id);
+  });
+
+  // used to deserialize the user
+passport.deserializeUser(function(id, done) {
+    Contact.findById(id, function(err, contact) {
+        done(err, contact);
+    });
+});
+
+passport.use('local-login', new LocalStrategy({
+        // by default, local strategy uses username and password, we will override with email
+        usernameField : 'username',
+        passwordField : 'password',
+        passReqToCallback : true // allows us to pass back the entire request to the callback
+    },
+    function(req, username, password, done) { // callback with email and password from our form
+
+        console.log('entre al local');
+
+        // find a user whose email is the same as the forms email
+        // we are checking to see if the user trying to login already exists
+        Contact.findOne({ 'username' :  username }, function(err, contact) {
+            // if there are any errors, return the error before anything else
+            
+            //console.log(contact);
+            console.log(contact);
+            //console.log(contact.validPassword(password,contact.password));
+            console.log(err);
+            
+            if (err){
+
+                console.log('entro al err');
+                return done(err);
+            }
+            // if no user is found, return the message
+            console.log('pase el de error')
+            console.log(!contact);
+            if (!contact)
+
+                return done(null, false, req.flash('loginMessage', 'No contact found.')); // req.flash is the way to set flashdata using connect-flash
+              
+              
+              // if the user is found but the password is wrong
+              
+            console.log(!(contact.password == password));  
+            if (!(contact.password == password))
+                
+              return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.'));              
+              // all is well, return successful user
+              
+            console.log('todo ok');
+            return done(null, contact);
+                  
+            });
+
+}));*/
 
 
 
-/*passport.use(new LocalStrategy(
-  function(contact, done){
-    console.log("entre al local strat");
-    if (contact.username == "admin" && contact.pass == "123"){
-      
-      return done(null,contact);
-    }
-    return done(null,false,{message:"unable to login"});
-  }
-));
-*/
 
 
 /*
@@ -93,13 +136,15 @@ Post Methods
 
 app.post('/contactInsert',function(req, res){
 
-  var Contact = mongoose.model('Contact');
+  //var Contact = mongoose.model('Contact');
   var newContact = new Contact();
   
   newContact.name = req.body.name;
   newContact.dni = req.body.dni;
   newContact.tel = req.body.number;
   newContact.email = req.body.email;
+  newContact.username = "1";
+  newContact.password =  "1";
 
   console.log(newContact.dates);
   
@@ -110,12 +155,17 @@ app.post('/contactInsert',function(req, res){
 
 });
 
-app.post('/login'/*, passport.authenticate('local')*/, function(req,res){
-  
-  console.log("entre al login");
-  
-  res.send(req.user);
-});
+app.post('/login', passport.authenticate('local-login'/*, {
+        successRedirect : '/profile', // redirect to the secure profile section
+        failureRedirect : '/login', // redirect back to the signup page if there is an error
+        failureFlash : true // allow flash messages
+    }*/),function(req,res){ 
+
+      console.log(req.user);
+      //console.log(res);
+      res.json(req.user);
+
+    });
 
 /*
 ------------------
@@ -165,15 +215,6 @@ Get Methods
 -----------------------
 */
 
-app.get("/allContacts",function(req,res){
-  
-  console.log("Get full ContactList");
-  Contact.find(function (err, docs) {
-    if (err) return console.error(err);
-    res.json(docs);
-  })
-
-});
 
 app.get('/singleContact/:id', function(req, res){
   
